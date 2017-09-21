@@ -21,6 +21,7 @@ $(document).ready( function()
 	$('#carousel').carousel({
 		interval:   slideInterval
 	});
+	$('.carousel-control.right').trigger('click');
 	
 	var clickEvent = false;
 	$('#thumbCarousel').on('click', '.nav-carousel a', function() {

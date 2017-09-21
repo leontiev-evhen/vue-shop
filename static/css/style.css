@@ -232,6 +232,10 @@ h1 {
 	color: #fff;
 }
 
+.product_btn button:hover {
+	color: #fff;
+}
+
 .product_info div {
 	margin-top: 20px;
 }

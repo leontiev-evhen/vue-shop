@@ -13,9 +13,8 @@
                 </div>
                 <ul class="nav navbar-nav">
                   <li><router-link to="/">Home</router-link></li>
-                  <li><router-link to="/bag"><img src="/static/images/cart.png" class="bag">({{countItem}})</router-link></li>
+                  <li><router-link to="/bag"><bag-product-count></bag-product-count></router-link></li>
                 </ul>
-
               </div>
             </nav>
           </div>
@@ -27,6 +26,7 @@
 </template>
 
 <script>
+import BagProductCount from './components/bag/BagProductCount.vue'
 export default {
   name: 'app',
   data() {
@@ -34,14 +34,8 @@ export default {
       countProduct: '',
     }
   },
-  computed: {
-    countItem() {
-      if (localStorage['bag']) {
-        return Object.keys(JSON.parse(localStorage['bag'])).length
-      }
-      return 0
-    }
-    
+  components: {
+	  BagProductCount
   }
 }
 </script>
@@ -51,6 +45,5 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
 }
 </style>
