@@ -1,15 +1,17 @@
 <template>
-	<h1>{{msg}}</h1>
+	<div class="center">
+		<img src="/static/images/404.png" class="error">
+	</div>
 </template>
 
 <script>
-
 	export default {
 		name: 'page_not_found',
-		data() {
-			return {
-				msg: 'Page Not Found ',
-			}
-		},
 	}
 </script>
+
+<style>
+	.center {
+		text-align: center;
+	}
+</style>

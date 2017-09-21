@@ -32,7 +32,7 @@
 				<div class="product_description">{{data.description}}</div>
 				<div class="product_price">{{data.price}} EUR</div>
 				<div class="product_size">
-					<select class="form-control">
+					<select class="form-control" v-model="size">
 						<option value="">Choose size</option>
 						<option v-for="size in data.size">{{size}}</option>
 					</select>
@@ -43,16 +43,21 @@
 			</div>
 		</div>
 	</div>
+	<div v-else>
+		<page-not-found></page-not-found>
+	</div>
 	
 </template>
 
 <script>
+import PageNotFound from '../PageNotFound.vue'
 export default {
 	name: 'product_info',
 	data() {
 		return {
 			data: null,
 			size: '',
+			agree: false,
 			buttonText: 'Add to bag',
 			buttonTextAfterClick: 'Proceed to checkout'
 		}
@@ -68,24 +73,34 @@ export default {
 		addToBag: function() {
 			var self = this
 			this.buttonText = this.buttonTextAfterClick
+			
+			if (this.agree) {
+				window.location.href = "#/bag";
+			}
 		
 		    var aBag = [];
 			aBag = JSON.parse(localStorage['bag'] || '[]')
-
+			
+			var item = {id: this.data.id, name: this.data.name, size: this.size, price: this.data.price, img: this.data.img}
+			
 			if (!$.isEmptyObject(aBag)) {
 				if (self.indexWhere(aBag, item => item.id === this.data.id) == -1) {
-					aBag.push(this.data)
+					aBag.push(item)
 				}
 			} else {
-				aBag.push(this.data)
+				aBag.push(item)
 			}
 		
 		    localStorage['bag'] = JSON.stringify(aBag);
+			this.agree = true;
 		},
 		indexWhere: function(array, conditionFn) {
 			var item = array.find(conditionFn)
 			return array.indexOf(item)
 		}
+	},
+	components: {
+	  PageNotFound
 	}
 }
 </script>

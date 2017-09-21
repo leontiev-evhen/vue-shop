@@ -27,6 +27,7 @@
 
 <script>
 import BagProductCount from './components/bag/BagProductCount.vue'
+
 export default {
   name: 'app',
   data() {

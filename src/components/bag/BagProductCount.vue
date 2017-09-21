@@ -7,14 +7,26 @@
 <script>
 	export default {
 		name: 'bag_product_count',
+		data() {
+			return {
+				countProduct: 0
+			}
+		},
 		computed: {
 			countItem() {
 			  if (localStorage['bag']) {
-				return Object.keys(JSON.parse(localStorage['bag'])).length
+				this.countProduct = Object.keys(JSON.parse(localStorage['bag'])).length
+				return this.countProduct
 			  }
-			  return 0
+			  return this.countProduct
 			}
 			
+		},
+		methods: {
+			test: function(el) {
+				this.countProduct + el
+				console.log(this.countProduct)
+			}
 		}
 	}
 </script>
