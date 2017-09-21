@@ -1,13 +1,48 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <div class="container">
+      <header>
+        <div class="row">
+          <div class="header-wrapper col-md-12">
+            <nav class="navbar navbar-inverse">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="#">
+                    <img src="/static/images/logo.png" class="logo">
+                  </a>
+                </div>
+                <ul class="nav navbar-nav">
+                  <li><router-link to="/">Home</router-link></li>
+                  <li><router-link to="/bag"><img src="/static/images/cart.png" class="bag">({{countItem}})</router-link></li>
+                </ul>
+
+              </div>
+            </nav>
+          </div>
+        </div>
+      </header>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data() {
+    return {
+      countProduct: '',
+    }
+  },
+  computed: {
+    countItem() {
+      if (localStorage['bag']) {
+        return Object.keys(JSON.parse(localStorage['bag'])).length
+      }
+      return 0
+    }
+    
+  }
 }
 </script>
 
@@ -16,8 +51,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

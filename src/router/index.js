@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import ProductList from '@/components/ProductList'
-import Todos from '@/components/Todos'
+import ProductInfo from '@/components/ProductInfo'
+import PageNotFound from '@/components/PageNotFound'
 
 Vue.use(Router)
 
@@ -13,9 +14,14 @@ export default new Router({
       component: ProductList
     },
     {
-      path: '/todo',
-      name: 'Todos',
-      component: Todos
-    }
+      path: '/product/:id',
+      name: 'ProductInfo',
+      component: ProductInfo
+    },
+	{
+      path: '*',
+      name: 'PageNotFound ',
+      component: PageNotFound 
+    },
   ]
 })

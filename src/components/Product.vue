@@ -1,10 +1,15 @@
 <template>
  	<div class="col-md-4 item">
 		<div class="group list-group-image">
-			<img :src="product.img">
+			<div v-if="Array.isArray(product.img)">
+				<img :src="product.img[0]">
+			</div>
+			<div v-else>
+				<img :src="product.img">
+			</div>
 		</div>
 		<div class="product-name">
-			<a :href="'/product.html?id=' + product.id">{{product.name}}</a> <b> - {{product.price}} EUR</b>
+			<a :href="'#/product/' + product.id">{{product.name}}</a> <b> - {{product.price}} EUR</b>
 		</div>
 	</div>
 </template>
