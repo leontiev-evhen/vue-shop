@@ -13,25 +13,37 @@
                 </div>
                 <ul class="nav navbar-nav">
                   <li><router-link to="/">Home</router-link></li>
-                  <li><router-link to="/bag"><img src="/static/images/cart.png" class="bag"><bag-product-count></bag-product-count></router-link></li>
+                  <li><router-link to="/bag" ><img src="/static/images/cart.png" class="bag"><span>({{count}})</span></router-link></li>
                 </ul>
               </div>
             </nav>
           </div>
         </div>
       </header>
-      <router-view></router-view>
+      <router-view  @addToBag="addToBag" @removeProduct="removeProduct"></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import BagProductCount from './components/bag/BagProductCount.vue'
 
 export default {
   name: 'app',
-  components: {
-	  BagProductCount
+  data() {
+	  return {
+		  count: 0
+	  }
+  },
+  methods: {
+	  addToBag: function(el) {
+		  this.count = el
+	  },
+	  removeProduct: function(el) {
+		  this.count = el
+	  }
+  },
+  created() {
+	  this.count = Object.keys(JSON.parse(localStorage['bag'])).length
   }
 }
 </script>

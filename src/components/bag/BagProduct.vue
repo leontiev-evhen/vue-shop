@@ -9,7 +9,7 @@
 				</ul>
 			</div>
 			<div class="count">
-				<button @click="changeCount(-1, product.id)">-</button><span v-model="count">{{count}}</span><button @click="changeCount(+1, product.id)">+</button>
+				<button @click="changeCount(-1)">-</button><span v-model="count">{{count}}</span><button @click="changeCount(+1)">+</button>
 			</div>
 			<button class="delete" @click="remove(product.id)">X</button>
 		</div>
@@ -37,15 +37,23 @@
 
   		},
   		methods: {
-  			changeCount(operation, productId) {
+  			changeCount(operation) {
   				this.count += operation
   				if (this.count <= 1) {
   					this.count = 1;
   				}
-  				this.$emit('test', this.count, productId)
+  				this.$emit('test', this.count, this.product.id)
   			},
-  			remove(id) {
-  			  	console.log(this)
+  			remove() {
+				var p = JSON.parse(localStorage['bag'] || '[]')
+			
+  			  	for (var key in p) {
+					if (p[key].id == this.product.id) {
+						p.splice(key, 1)
+						localStorage['bag'] = JSON.stringify(p)
+					}
+				}
+				this.$emit('removeProduct', Object.keys(JSON.parse(localStorage['bag'])).length)
   			}
   		}
 	}

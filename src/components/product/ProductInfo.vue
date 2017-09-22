@@ -36,6 +36,7 @@
 						<option value="">Choose size</option>
 						<option v-for="size in data.size">{{size}}</option>
 					</select>
+					<span class="warning">{{error}}</span>
 				</div>
 				<div class="product_btn">
 					<button type="button" class="btn" v-on:click="addToBag">{{buttonText}}</button>
@@ -58,7 +59,8 @@ export default {
 			size: '',
 			agree: false,
 			buttonText: 'Add to bag',
-			buttonTextAfterClick: 'Proceed to checkout'
+			buttonTextAfterClick: 'Proceed to checkout',
+			error: ''
 		}
 	},
 	created() {
@@ -87,17 +89,24 @@ export default {
 			if (!$.isEmptyObject(aBag)) {
 				if (self.indexWhere(aBag, item => item.id === this.data.id) == -1) {
 					aBag.push(item)
+				} else if (self.indexWhere(aBag, item => item.id === this.data.id) == 0 && self.indexWhere(aBag, item => item.size === item.size) == 0) {
+					item.count++
+				
 				}
 			} else {
 				aBag.push(item)
 			}
+			
 		
 		    localStorage['bag'] = JSON.stringify(aBag);
+			
 			this.agree = true;
+			this.$emit('addToBag', Object.keys(JSON.parse(localStorage['bag'])).length)
 
 		},
 
 		indexWhere: function(array, conditionFn) {
+		
 			var item = array.find(conditionFn)
 			return array.indexOf(item)
 		}
@@ -107,3 +116,9 @@ export default {
 	}
 }
 </script>
+
+<style>
+	.warning {
+		color: red;
+	}
+</style>

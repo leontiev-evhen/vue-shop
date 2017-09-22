@@ -3,7 +3,7 @@
 		<div class="col-md-12">
 			<h1>Checkout</h1>
 			<div class="col-md-8">
-					<bag-product v-for="product, key in products" :product="product" :key="key" @test="changeCountProduct"></bag-product>
+					<bag-product v-for="product, key in products" :product="product" :key="key" @test="changeCountProduct" @removeProduct="removeProduct"></bag-product>
 			</div>
 			<div class="col-md-4 right_sidebar">
 				<div class="voucher_block">
@@ -81,6 +81,10 @@ export default {
 			}
 			this.voucher = ''
 		},
+		removeProduct: function() {
+			this.products = JSON.parse(localStorage['bag'] || '[]')
+			this.$emit('removeProduct', Object.keys(JSON.parse(localStorage['bag'])).length)
+		},
 		changeCountProduct: function(count, productId) {
 			for (var key in this.products) {
 				if (this.products[key].id == productId) {
@@ -103,7 +107,7 @@ export default {
 			sum *= this.products[key].count
 			total += sum
 			}
-		
+			return total
 			return this.total = total
 		},
 		validation: function () {
