@@ -13,7 +13,7 @@
                 </div>
                 <ul class="nav navbar-nav">
                   <li><router-link to="/">Home</router-link></li>
-                  <li><router-link to="/bag"><bag-product-count></bag-product-count></router-link></li>
+                  <li><router-link to="/bag"><img src="/static/images/cart.png" class="bag"><bag-product-count></bag-product-count></router-link></li>
                 </ul>
               </div>
             </nav>
@@ -30,11 +30,6 @@ import BagProductCount from './components/bag/BagProductCount.vue'
 
 export default {
   name: 'app',
-  data() {
-    return {
-      countProduct: '',
-    }
-  },
   components: {
 	  BagProductCount
   }

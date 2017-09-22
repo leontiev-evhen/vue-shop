@@ -1,10 +1,11 @@
 <template>
 	<span class="count">
-		<img src="/static/images/cart.png" class="bag">({{countItem}})
+		{{countItem}}
 	</span>
 </template>
  
 <script>
+import ProductInfo from '../product/ProductInfo.vue'
 	export default {
 		name: 'bag_product_count',
 		data() {
@@ -27,6 +28,9 @@
 				this.countProduct + el
 				console.log(this.countProduct)
 			}
+		}, 
+		components: {
+		  ProductInfo
 		}
 	}
 </script>

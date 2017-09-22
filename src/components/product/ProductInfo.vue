@@ -46,7 +46,6 @@
 	<div v-else>
 		<page-not-found></page-not-found>
 	</div>
-	
 </template>
 
 <script>
@@ -63,6 +62,7 @@ export default {
 		}
 	},
 	created() {
+
 		for (var key in products) {
 			if (this.$route.params.id == products[key].id) {
 				this.data = products[key]
@@ -71,6 +71,7 @@ export default {
 	},
 	methods: {
 		addToBag: function() {
+
 			var self = this
 			this.buttonText = this.buttonTextAfterClick
 			
@@ -81,7 +82,7 @@ export default {
 		    var aBag = [];
 			aBag = JSON.parse(localStorage['bag'] || '[]')
 			
-			var item = {id: this.data.id, name: this.data.name, size: this.size, price: this.data.price, img: this.data.img}
+			var item = {id: this.data.id, name: this.data.name, size: this.size, price: this.data.price, count: 1, img: this.data.img}
 			
 			if (!$.isEmptyObject(aBag)) {
 				if (self.indexWhere(aBag, item => item.id === this.data.id) == -1) {
@@ -93,7 +94,9 @@ export default {
 		
 		    localStorage['bag'] = JSON.stringify(aBag);
 			this.agree = true;
+
 		},
+
 		indexWhere: function(array, conditionFn) {
 			var item = array.find(conditionFn)
 			return array.indexOf(item)
