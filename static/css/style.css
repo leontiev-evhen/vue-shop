@@ -244,3 +244,15 @@ h1 {
 	width: 40px;
 	height: 35px; 
 }
+
+.alert-danger {
+		margin-top: 10px;
+}
+
+.help.is-danger {
+    color: #ff3860;
+}
+
+.input.is-danger, .textarea.is-danger {
+    border-color: #ff3860;
+}

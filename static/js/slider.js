@@ -1,7 +1,9 @@
 $(document).ready(function()
 {
+	setInterval(function(){$('.carousel-control.right').trigger('click')}, 2000);
     $('#thumbCarousel').carousel({
-		interval: 3000
+		interval: 3000,
+		cycle: true
 	})
 });
 
@@ -19,9 +21,10 @@ $(document).ready( function()
 	var slideInterval = 2000;
 	
 	$('#carousel').carousel({
-		interval:   slideInterval
+		interval:   slideInterval,
+		cycle: true
 	});
-	$('.carousel-control.right').trigger('click');
+	
 	
 	var clickEvent = false;
 	$('#thumbCarousel').on('click', '.nav-carousel a', function() {

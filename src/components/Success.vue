@@ -1,8 +1,18 @@
 <template>
-	<div>
-		<ul>
-			<li v-for="product in products">{{product.name}}</li>
-		</ul>
+	<div class="table-responsive">
+	  <table class="table table-hover">
+	  	<tbody>
+	  	<tr>
+	  		<th>Name</th><th>Price</th><th>Count</th>
+	  	</tr>
+	    <tr v-for="product in products">
+	    	<td>{{product.name}}</td>
+	    	<td>{{product.price}} {{$parent.lang.valuta}}</td>
+	    	<td>{{product.count}}</td>
+	    </tr>
+	    </tbody>
+	  </table>
+	</div>
 	</div>
 </template>
  
@@ -11,11 +21,12 @@
 		name: 'success',
 		data() {
 			return {
-				products: JSON.parse(localStorage['bag'] || '[]'),
+				products: this.$parent.cart.get()
 			}
 		},
 		mounted: function () {
-			localStorage.clear()
+			this.$parent.cart.clear()
+			this.$parent.count = 0
 		}
 	}
 </script>

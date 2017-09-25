@@ -12,8 +12,8 @@
                   </a>
                 </div>
                 <ul class="nav navbar-nav">
-                  <li><router-link to="/">Home</router-link></li>
-                  <li><router-link to="/bag" ><img src="/static/images/cart.png" class="bag"><span>({{count}})</span></router-link></li>
+                  <li><router-link to="/">{{lang.text_home}}</router-link></li>
+                  <li v-show="count"><router-link to="/bag" ><img src="/static/images/cart.png" class="bag"><span> < {{count}}</span></router-link></li>
                 </ul>
               </div>
             </nav>
@@ -26,24 +26,29 @@
 </template>
 
 <script>
-
+import products from './api/data'
+import lang from './lang'
+import CustomLocalStorage from './libs/CustomLocalStorage'
 export default {
   name: 'app',
   data() {
 	  return {
-		  count: 0
+		  count: 0,
+      products: products,
+      lang: lang,
+      cart: new CustomLocalStorage("bag")
 	  }
   },
   methods: {
-	  addToBag: function(el) {
-		  this.count = el
+	  addToBag: function() {
+      this.count = this.cart.getCount()
 	  },
-	  removeProduct: function(el) {
-		  this.count = el
+	  removeProduct: function() {
+		  this.count = this.cart.getCount()
 	  }
   },
   created() {
-	  this.count = Object.keys(JSON.parse(localStorage['bag'])).length
+    this.count = this.cart.getCount()
   }
 }
 </script>
@@ -54,4 +59,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.navbar-nav span {
+  font-size: 20px;
+}
+
+
 </style>

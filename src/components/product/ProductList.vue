@@ -1,8 +1,7 @@
 <template>
-
   <div class="row">
     <div class="col-md-12">
-        <h1>Home</h1>
+        <h1>{{this.$parent.lang.text_home}}</h1>
         <div class="panel panel-primary filterable">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -10,35 +9,35 @@
                 </h3>
             </div>
             <table class="table">
-                  <tr class="filters">
-                      <th>
-                        <select v-model="category" @change="" class="form-control" id="filter_category">
-                          <option value="">Categories</option>
-                          <option v-for="category in options.categories" :value="category">{{category}}</option>
-                        </select>
-                      </th>                    
-                      <th>
-                        <select v-model="color" v-on:change="" class="form-control" id="filter_size">
-                          <option value="">Colors</option>
-                          <option v-for="color in options.colors" :value="color">{{color}}</option>
-                        </select>
-                      </th>
-                      <th>
-                        <select v-model="size" v-on:change="" class="form-control" id="filter_color">
-                          <option value="">Sizes</option>
-                          <option v-for="size in options.sizes" :value="size">{{size}}</option>
-                        </select>
-                      </th>
-                      <th>
-                         <select v-model="sort" @change="" class="form-control" id="filter_sort">
-                          <option value="">Sorts</option>
-                          <option v-for="sort in options.sorts" :value="sort">{{sort}}</option>
-                        </select>
-                      </th>
-                      <th>
-                        <button id="filter_clear" @click="clear">Clear filter</button>
-                      </th>
-                  </tr>
+              <tr class="filters">
+                  <th>
+                    <select v-model="category" @change="" class="form-control" id="filter_category">
+                      <option value="">{{this.$parent.lang.text_categories}}</option>
+                      <option v-for="category in options.categories" :value="category">{{category}}</option>
+                    </select>
+                  </th>                    
+                  <th>
+                    <select v-model="color" v-on:change="" class="form-control" id="filter_size">
+                      <option value="">{{this.$parent.lang.text_colors}}</option>
+                      <option v-for="color in options.colors" :value="color">{{color}}</option>
+                    </select>
+                  </th>
+                  <th>
+                    <select v-model="size" v-on:change="" class="form-control" id="filter_color">
+                      <option value="">{{this.$parent.lang.text_sizes}}</option>
+                      <option v-for="size in options.sizes" :value="size">{{size}}</option>
+                    </select>
+                  </th>
+                  <th>
+                     <select v-model="sort" @change="" class="form-control" id="filter_sort">
+                      <option value="">{{this.$parent.lang.text_sorts}}</option>
+                      <option v-for="sort in options.sorts" :value="sort">{{sort}}</option>
+                    </select>
+                  </th>
+                  <th>
+                    <button id="filter_clear" @click="clear">{{this.$parent.lang.text_clear}}</button>
+                  </th>
+              </tr>
             </table>
         </div>
         <div id="content">
@@ -63,8 +62,8 @@ export default {
       options: {
         categories: ['Round Neck', 'Crew Neck', 'Collarless'],
         colors: ['black', 'grey', 'white','blue'],
-		sizes: ['L', 'M', 'XL'],
-		sorts: ['low', 'high'],
+		    sizes: ['L', 'M', 'XL'],
+		    sorts: ['low', 'high'],
 	  },
 	  dataProducts: []
     }
@@ -73,17 +72,6 @@ export default {
 	  Product
   },
   methods : {
-		sortPrice: function(sort) {
-			if (sort == 'high') {
-				this.dataProducts.sort((a, b) => {
-					return b.price.toString().localeCompare(a.price);
-				});
-			} else {
-				this.dataProducts.sort((a, b) => {
-					return a.price.toString().localeCompare(b.price);
-				});
-			}
-		},
 		clear: function() {
 			this.category = '';
 			this.color = '';
@@ -92,7 +80,7 @@ export default {
 		}
 	},
 	created() {
-		this.dataProducts = products
+		this.dataProducts = this.$parent.products
 	},
 	computed: {
 		filteredProducts() {
@@ -121,20 +109,19 @@ export default {
 			}
 			
 			if (self.sort == 'high') {
-				this.dataProducts.sort((a, b) => {
+				self.dataProducts.sort((a, b) => {
 					return b.price.toString().localeCompare(a.price);
 				});
 			} else {
-				this.dataProducts.sort((a, b) => {
+				self.dataProducts.sort((a, b) => {
 					return a.price.toString().localeCompare(b.price);
 				});
 			}
 			
-			return this.dataProducts.filter((el) => {
+			return self.dataProducts.filter((el) => {
 				return checkCategory(el) && checkColor(el) && checkSize(el)
 			})
 		}
 	}
 }
 </script>
-

@@ -15,7 +15,7 @@ var products = [
 		"description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
 		"category": "Crew Neck",
 		"img": "https://gloimg.gbtcdn.com/gb/pdm-product-pic/Electronic/2017/05/26/gridclothes/20170526112105_95919.jpg",
-		"size": ["M"],
+		"size": ["M", "S"],
 		"price": 100,
 		"color": ["grey"]
 	},
@@ -60,3 +60,4 @@ var products = [
 	    "color": ["blue", "black"]
 	}
 ];
+export default products

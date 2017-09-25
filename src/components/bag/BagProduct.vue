@@ -4,14 +4,14 @@
 			<h4><a :href="'#/product/' + product.id">{{product.name}}</a></h4>
 			<div class="size">
 				<ul>
-					<li>Size{{product.size}}</li>
-					<li>{{product.price}} EUR</li>
+					<li>Size<br>{{product.size}}</li>
+					<li>{{product.price}} {{this.$parent.$parent.lang.valuta}}</li>
 				</ul>
 			</div>
 			<div class="count">
-				<button @click="changeCount(-1)">-</button><span v-model="count">{{count}}</span><button @click="changeCount(+1)">+</button>
+				<button @click="changeCountProduct(-1)">-</button><span v-model="count">{{count}}</span><button @click="changeCountProduct(+1)">+</button>
 			</div>
-			<button class="delete" @click="remove(product.id)">X</button>
+			<button class="delete" @click="removeProduct()">X</button>
 		</div>
 		<div class="col-md-4 item">
 			<div v-if="Array.isArray(product.img)">
@@ -30,30 +30,27 @@
   		props: ['product'],
   		data() {
   			return {
-  				count: 1,
+  				count: this.product.count,
   			}
   		},
-  		computed: {
-
-  		},
   		methods: {
-  			changeCount(operation) {
+  			changeCountProduct: function(operation) {
   				this.count += operation
   				if (this.count <= 1) {
-  					this.count = 1;
+  					this.count = 1
   				}
-  				this.$emit('test', this.count, this.product.id)
+  				this.$emit('changeCountProduct', this.count, this.product.id)
   			},
-  			remove() {
-				var p = JSON.parse(localStorage['bag'] || '[]')
+  			removeProduct: function() {
+				var localData = this.$parent.$parent.cart.get()
 			
-  			  	for (var key in p) {
-					if (p[key].id == this.product.id) {
-						p.splice(key, 1)
-						localStorage['bag'] = JSON.stringify(p)
+  			  	for (var key in localData) {
+					if (localData[key].code == this.product.code) {
+						localData.splice(key, 1)
+						this.$parent.$parent.cart.set(localData)
 					}
 				}
-				this.$emit('removeProduct', Object.keys(JSON.parse(localStorage['bag'])).length)
+				this.$emit('removeProduct')
   			}
   		}
 	}

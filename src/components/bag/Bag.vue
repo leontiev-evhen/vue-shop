@@ -1,89 +1,63 @@
 <template>
 	<div class="row" v-if="products.length > 0">
 		<div class="col-md-12">
-			<h1>Checkout</h1>
+			<h1>{{this.$parent.lang.text_checkout}}</h1>
 			<div class="col-md-8">
-					<bag-product v-for="product, key in products" :product="product" :key="key" @test="changeCountProduct" @removeProduct="removeProduct"></bag-product>
+					<bag-product v-for="product, key in products" :product="product"" @changeCountProduct="changeCountProduct" @removeProduct="removeProduct"></bag-product>
 			</div>
 			<div class="col-md-4 right_sidebar">
-				<div class="voucher_block">
-					<h4>Voucher code</h4>
-					<form @submit.prevent="discauntAction">
-						<p>
-							<input type="text" v-model="voucher">
-						</p>
-						<button type="submit">Submit</button>
-					</form>
-				</div>
+
+				<discount @discountAction="discountAction"></discount>
+
 				<div class="total">
 					<ul class="list-group">
 						<li class="list-group-item">
-							Subtotal: <bag-product-count></bag-product-count> items
+							{{this.$parent.lang.text_subtotal}}:  {{this.$parent.cart.getCount()}} {{this.$parent.lang.text_items}}
 						</li> 
-						<li class="list-group-item" v-show="discaunt">
-							Discount: {{discaunt}}
+						<li class="list-group-item" v-show="dataDiscount.value">
+							{{this.$parent.lang.text_discount}}: - {{dataDiscount.value}} {{dataDiscount.operatin}}
 						</li> 
 						<li class="list-group-item">
-							<strong>Total:</strong> 
-							<strong>{{Total}}</strong> 
+							<strong>{{this.$parent.lang.text_total}}:</strong> 
+							<strong v-html="Total"></strong> 
+							<span>{{this.$parent.lang.valuta}}</span>
 						</li>
 					</ul>
 				</div>
-				<div class="form">
-					<h4>Your Details</h4>
-					<form @submit.prevent="validForm">
-						<p><input v-model="firstName" type="text" name="firstName" placeholder="First name"></p>
-						<p><input v-model="lastName" type="text" name="lastName" placeholder="Last name"></p>
-						<p><input v-model="email" type="text" name="email" placeholder="Email"></p>
-						<button type="submit">Complete purchase</button>
-					</form>
-					<ul class="errors">
-						<li v-show="!validation.firstName">First name cannot be empty</li>
-						<li v-show="!validation.lastName">Last name cannot be empty</li>
-						<li v-show="!validation.email">Email cannot be empty</li>
-					</ul>
-				</div>
+				<bag-form></bag-form>
 			</div>
 		</div>	
 	</div>
 	<div v-else>
-		<h2 class="center">Bag is empty</h2>
+		<h2 class="center">{{this.$parent.lang.text_empty_bag}}</h2>
 	</div>
 	
 </template>
 
 <script>
 import BagProduct from './BagProduct.vue'
-import BagProductCount from './BagProductCount.vue'
-var emailREG = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+import Discount from './Discount.vue'
+import BagForm from './BagForm.vue'
+import CustomLocalStorage from '../../libs/CustomLocalStorage'
 export default {
 	name: 'bag',
 	data() {
 		return {
-			products: JSON.parse(localStorage['bag'] || '[]'),
-			voucher: '',
-			discaunt: 0,
+			products: this.$parent.cart.get(),
+			discount: new CustomLocalStorage('discount'),
 			total: 0,
-			firstName: '',
-			lastName: '',
-			email: '',
+			count: 0,
+			dataDiscount: 0
 		}
 	},
 	methods: {
-		discauntAction: function() {
-			switch (this.voucher) {
-				case 'disck5eur':
-					this.discaunt = 5
-					break;
-				case 'disck10':
-					this.discaunt = 10
-					break;
-			}
-			this.voucher = ''
+		discountAction: function(discount) {
+			//this.discount.set(discount)
+			this.dataDiscount = discount
 		},
 		removeProduct: function() {
-			this.products = JSON.parse(localStorage['bag'] || '[]')
-			this.$emit('removeProduct', Object.keys(JSON.parse(localStorage['bag'])).length)
+			this.products = this.$parent.cart.get()
+			this.$emit('removeProduct')
 		},
 		changeCountProduct: function(count, productId) {
 			for (var key in this.products) {
@@ -91,42 +65,38 @@ export default {
 					this.products[key].count = count
 				}
 			}
-		},
-		validForm: function() {
-			if (this.isValid) {
-				window.location.href = '#/success';
-			}
+			this.$parent.cart.set(this.products)
 		}
-	},
+	},	
 	computed: {
 		Total() {
-			var total = 0;
-			var sum;
+			var total = 0
+			var sum
+
 			for (var key in this.products) {
-			sum = this.products[key].price
-			sum *= this.products[key].count
-			total += sum
+				sum = this.products[key].price
+				sum *= this.products[key].count
+				total += sum
+			}
+
+			if (this.dataDiscount.value) {
+				var oldTotal = total
+				if (this.dataDiscount.operatin == '%') {
+					total -= (total * this.dataDiscount.value) / 100
+				} else {
+					total -= this.dataDiscount.value
+				}
+				return '<strike>' + oldTotal + ' ' + this.$parent.lang.valuta + '</strike><br>' + total
 			}
 			return total
-			return this.total = total
 		},
-		validation: function () {
-	      return {
-	        firstName: !!this.firstName.trim(),
-	        lastName: !!this.lastName.trim(),
-	        email: emailREG.test(this.email)
-	      }
-	    },
-	    isValid: function () {
-	      var validation = this.validation
-	      return Object.keys(validation).every(function (key) {
-	        return validation[key]
-	      })
-	    }
 		
 	},
+	created() {
+		//this.dataDiscount = this.discount.get()
+	},
 	components: {
-		BagProduct, BagProductCount
+		BagProduct, Discount, BagForm
 	}
 }
 
@@ -153,24 +123,28 @@ export default {
     	border: none;
     	padding: 10px;
 	}
+
+	.voucher_block button {
+		background: #222;
+    	width: 20%;
+    	color: #fff;
+    	border: none;
+    	padding: 10px;
+	}
+
 	.total {
 		padding-top:20px;
 		padding-bottom: 20px;
 		border-bottom: 1px solid #000;
 	}
 	
-	.errors li {
-		color: red;
-	}
-
 	.list-group-item {
 		border-color: #222;
 	}
 
 	input {
 		border: 1px solid #222;
-		padding:5px;
+		padding:10px;
 		width: 100%;
 	}
-	    
 </style>

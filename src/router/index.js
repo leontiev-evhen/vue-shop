@@ -21,7 +21,7 @@ export default new Router({
       name: 'ProductInfo',
       component: ProductInfo
     },
-	{
+	  {
       path: '/bag',
       name: 'bag',
       component: Bag
@@ -31,7 +31,7 @@ export default new Router({
       name: 'success',
       component: Success
     },
-	{
+	  {
       path: '*',
       name: 'PageNotFound ',
       component: PageNotFound 
